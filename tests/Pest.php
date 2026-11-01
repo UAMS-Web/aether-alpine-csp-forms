@@ -11,6 +11,6 @@
 
 declare(strict_types=1);
 
-use UAMSWeb\AlpineCspForms\Tests\TestCase;
+use UAMSWeb\Aether\Forms\AlpineCsp\Tests\TestCase;
 
 pest()->extend(TestCase::class)->in('Integration');

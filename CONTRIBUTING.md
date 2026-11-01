@@ -1,4 +1,4 @@
-# Contributing to statamic-alpine-csp-forms
+# Contributing to aether-alpine-csp-forms
 
 <!-- uams-claude-skills:begin -->
 ## Branches and environments

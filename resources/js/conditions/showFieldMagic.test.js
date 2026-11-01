@@ -16,7 +16,7 @@ import { HELPERS_SCRIPT, registerShowFieldMagic } from './showFieldMagic.js';
  * The magic exists because the CSP build's AST interpreter refuses the
  * expression Statamic's stock Alpine driver emits. Stubbing Alpine here would
  * assert nothing about that refusal, so these boot the actual interpreter and
- * evaluate the actual attribute strings `UAMSWeb\AlpineCspForms\JsDrivers\AlpineCsp` renders,
+ * evaluate the actual attribute strings `UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\AlpineCsp` renders,
  * including a negative control proving the stock expression still fails. The
  * evaluator the magic forwards to is the installed `statamic/cms` copy of
  * `helpers.js`, so a semantic change upstream shows up here.

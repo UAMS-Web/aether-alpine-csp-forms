@@ -23,6 +23,6 @@ The front-end script, `alpine-csp.js`, registers `$showField` when Alpine dispat
 
 | Path | What it is |
 | --- | --- |
-| `public/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js` | The published front-end script. |
+| `public/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js` | The published front-end script. |
 | `resources/js/alpine-csp.js` | The script's source, for a host that bundles it. |
 | `resources/js/conditions/showFieldMagic.js` | The magic, which forwards to Statamic's evaluator. |

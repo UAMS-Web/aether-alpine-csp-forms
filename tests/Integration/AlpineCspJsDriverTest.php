@@ -10,7 +10,7 @@ use Statamic\Fields\BlueprintRepository;
 use Statamic\Fields\Field;
 use Statamic\Forms\Form as FormModel;
 use Statamic\Forms\Tags as FormTags;
-use UAMSWeb\AlpineCspForms\JsDrivers\AlpineCsp;
+use UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\AlpineCsp;
 
 /**
  * Coverage for the CSP-safe public-form JS driver, moved from the application

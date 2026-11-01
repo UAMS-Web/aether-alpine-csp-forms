@@ -13,10 +13,10 @@ PHP 8.4 or later and Statamic 6.35.1 or later. The host loads Alpine itself, usi
 ## Installation
 
 ```bash
-composer require uams-web/statamic-alpine-csp-forms
+composer require uams-web/aether-alpine-csp-forms
 ```
 
-The add-on's service provider is discovered by Statamic and registers the driver under the handle `alpine_csp`. Statamic publishes the front-end script to `public/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js` after the install; `php artisan vendor:publish --tag=statamic-alpine-csp-forms --force` republishes it.
+The add-on's service provider is discovered by Statamic and registers the driver under the handle `alpine_csp`. Statamic publishes the front-end script to `public/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js` after the install; `php artisan vendor:publish --tag=aether-alpine-csp-forms --force` republishes it.
 
 ## Usage
 
@@ -31,13 +31,24 @@ Load Statamic's `helpers.js`, then the front-end script, before the host's own A
 
 ```html
 <script defer src="/vendor/statamic/frontend/js/helpers.js"></script>
-<script defer src="/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js"></script>
+<script defer src="/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js"></script>
 <script defer src="/build/site.js"></script>
 ```
 
 Statamic publishes `helpers.js` to `public/vendor/statamic/frontend/js/helpers.js`. Without it, `$showField` shows every conditional field and logs one console error naming the missing script.
 
 The script registers the `$showField` magic when Alpine dispatches `alpine:init`, so the host has to set `window.Alpine` before it calls `Alpine.start()`. A host that bundles the script instead can import `registerShowFieldMagic` from `resources/js/alpine-csp.js` and call it with its Alpine instance.
+
+## Upgrading from `statamic-alpine-csp-forms`
+
+The package was renamed from `uams-web/statamic-alpine-csp-forms` to `uams-web/aether-alpine-csp-forms`, and Composer does not redirect a package name. The `alpine_csp` driver handle, the `$showField` magic and the form tags are unchanged. A site changes four things:
+
+1. Run `composer remove uams-web/statamic-alpine-csp-forms` and `composer require uams-web/aether-alpine-csp-forms`.
+2. Run `php artisan vendor:publish --tag=aether-alpine-csp-forms --force`, then delete `public/vendor/statamic-alpine-csp-forms/`. The script now publishes to `public/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js`.
+3. Change the layout's script tag from `/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js` to `/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js`.
+4. Where a site published the add-on's configuration, rename `config/statamic-alpine-csp-forms.php` to `config/aether-alpine-csp-forms.php` (the file holds no settings today).
+
+The PHP namespace changed from `UAMSWeb\AlpineCspForms` to `UAMSWeb\Aether\Forms\AlpineCsp`; a site that references the add-on's classes updates those references.
 
 ## Development
 

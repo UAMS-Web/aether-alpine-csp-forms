@@ -19,7 +19,7 @@
  * no input fields at all.
  *
  * A magic moves the lookup out of the attribute and into module scope, where
- * reading a global is allowed. `UAMSWeb\AlpineCspForms\JsDrivers\AlpineCsp`
+ * reading a global is allowed. `UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\AlpineCsp`
  * emits the matching call (same three arguments, same order, only the callee
  * changes):
  *
@@ -54,7 +54,7 @@
  * rather than on every field of every form.
  *
  * @see src/JsDrivers/AlpineCsp.php  the driver that emits the `$showField(…)` call
- * @see UAMS-Web/statamic-alpine-csp-forms#18  forwarding to Statamic's evaluator
+ * @see UAMS-Web/aether-alpine-csp-forms#18  forwarding to Statamic's evaluator
  */
 
 /** The script that defines `window.Statamic.$conditions`, named in the missing-global error. */

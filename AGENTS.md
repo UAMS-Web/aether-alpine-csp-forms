@@ -1,4 +1,4 @@
-# Agent instructions for statamic-alpine-csp-forms
+# Agent instructions for aether-alpine-csp-forms
 
 This file is the single source of agent instructions for this repository. Claude Code, Cursor and Codex all read it directly; there is no `CLAUDE.md`, because Claude Code reads `AGENTS.md` only when `CLAUDE.md` is absent. Put instructions here, never in a `CLAUDE.md`.
 
@@ -46,7 +46,7 @@ Skills: [`code-quality`](.claude/skills/code-quality/SKILL.md), [`decision-log`]
 
 ## About this repository
 
-A Statamic add-on (`uams-web/statamic-alpine-csp-forms`, namespace `UAMSWeb\AlpineCspForms`). It registers the `alpine_csp` form JS driver (`src/JsDrivers/AlpineCsp.php`) and ships the `$showField` Alpine magic (`resources/js/conditions/showFieldMagic.js`) that the driver's output calls, which forwards to Statamic's front-end evaluator in `helpers.js`, built to `resources/dist/frontend` by `vite.frontend.config.js`. It is a Composer library with no `artisan`, `.env`, database or site front end of its own; a host application boots it through `extra.laravel.providers`. The `statamic-package-conventions` skill covers what that changes.
+A Statamic add-on (`uams-web/aether-alpine-csp-forms`, namespace `UAMSWeb\Aether\Forms\AlpineCsp`). It registers the `alpine_csp` form JS driver (`src/JsDrivers/AlpineCsp.php`) and ships the `$showField` Alpine magic (`resources/js/conditions/showFieldMagic.js`) that the driver's output calls, which forwards to Statamic's front-end evaluator in `helpers.js`, built to `resources/dist/frontend` by `vite.frontend.config.js`. It is a Composer library with no `artisan`, `.env`, database or site front end of its own; a host application boots it through `extra.laravel.providers`. The `statamic-package-conventions` skill covers what that changes.
 
 ### Commands
 
