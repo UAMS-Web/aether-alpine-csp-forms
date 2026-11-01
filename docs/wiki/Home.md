@@ -1,6 +1,6 @@
 Alpine CSP Forms is a Statamic add-on that gives public forms a JavaScript driver safe under a Content Security Policy without `'unsafe-eval'`. It registers the `alpine_csp` form JS driver and ships the `$showField` Alpine magic the driver's output calls, which forwards to Statamic's own field-conditions evaluator.
 
-This wiki holds the documentation: a walkthrough, a task guide, the reference and troubleshooting. The [README](https://github.com/UAMS-Web/statamic-alpine-csp-forms#readme) keeps an overview, the requirements and the install command.
+This wiki holds the documentation: a walkthrough, a task guide, the reference and troubleshooting. The [README](https://github.com/UAMS-Web/aether-alpine-csp-forms#readme) keeps an overview, the requirements and the install command.
 
 Releases are 0.x pre-releases until 1.0.0. A minor release can carry a breaking change, and its release notes call it out first with the action to take.
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace UAMSWeb\AlpineCspForms;
+namespace UAMSWeb\Aether\Forms\AlpineCsp;
 
 use Statamic\Providers\AddonServiceProvider;
-use UAMSWeb\AlpineCspForms\JsDrivers\AlpineCsp;
+use UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\AlpineCsp;
 
 /**
  * Service provider for the add-on.
@@ -41,7 +41,7 @@ class ServiceProvider extends AddonServiceProvider
     ];
 
     /**
-     * The built front-end script, published into the host's `public/vendor/statamic-alpine-csp-forms/`
+     * The built front-end script, published into the host's `public/vendor/aether-alpine-csp-forms/`
      * directory as `alpine-csp.js` for the host's layout to load before Alpine starts.
      * It is built by `vite.frontend.config.js`.
      *

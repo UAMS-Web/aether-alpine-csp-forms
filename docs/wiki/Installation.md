@@ -7,13 +7,13 @@ PHP 8.4 or later and Statamic 6.35.1 or later. The host loads Alpine itself, usi
 ## Install the package
 
 ```bash
-composer require uams-web/statamic-alpine-csp-forms
+composer require uams-web/aether-alpine-csp-forms
 ```
 
-The add-on's service provider is discovered by Statamic and registers the driver under the handle `alpine_csp`. After the install, Statamic publishes the front-end script to `public/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js`. To publish it again, for example after an update:
+The add-on's service provider is discovered by Statamic and registers the driver under the handle `alpine_csp`. After the install, Statamic publishes the front-end script to `public/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js`. To publish it again, for example after an update:
 
 ```bash
-php artisan vendor:publish --tag=statamic-alpine-csp-forms --force
+php artisan vendor:publish --tag=aether-alpine-csp-forms --force
 ```
 
 ## Load the script
@@ -22,7 +22,7 @@ Load Statamic's `helpers.js`, then the front-end script, before the host's own A
 
 ```html
 <script defer src="/vendor/statamic/frontend/js/helpers.js"></script>
-<script defer src="/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js"></script>
+<script defer src="/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js"></script>
 <script defer src="/build/site.js"></script>
 ```
 
@@ -36,8 +36,8 @@ A host that bundles the script instead can import `registerShowFieldMagic` from 
 
 1. Change `js="alpine_csp"` back to `js="alpine"` on each form tag.
 2. Delete the add-on's script tag. Statamic's stock driver also needs `helpers.js`, so keep that one.
-3. Run `composer remove uams-web/statamic-alpine-csp-forms`.
+3. Run `composer remove uams-web/aether-alpine-csp-forms`.
 
 The site returns to Statamic's stock driver. If Statamic ships a CSP-safe driver of its own, this is the path to it.
 
-The same steps, with the requirements, are in the [README](https://github.com/UAMS-Web/statamic-alpine-csp-forms#installation).
+The same steps, with the requirements, are in the [README](https://github.com/UAMS-Web/aether-alpine-csp-forms#installation).

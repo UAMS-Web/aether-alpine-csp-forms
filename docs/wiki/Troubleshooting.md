@@ -32,11 +32,11 @@ The form shows every field whatever the visitor chooses, and the browser console
 
 ## The script answers 404
 
-The page requests `/vendor/statamic-alpine-csp-forms/frontend/alpine-csp.js` and receives a 404.
+The page requests `/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js` and receives a 404.
 
 **Cause:** the script was never published to the host's `public/` directory, or the directory was cleaned.
 
-**Fix:** run `php artisan vendor:publish --tag=statamic-alpine-csp-forms --force`.
+**Fix:** run `php artisan vendor:publish --tag=aether-alpine-csp-forms --force`.
 
 ## A non-ASCII value changes after a failed submit
 

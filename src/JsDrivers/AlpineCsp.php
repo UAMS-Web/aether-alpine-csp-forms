@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UAMSWeb\AlpineCspForms\JsDrivers;
+namespace UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers;
 
 use Illuminate\Support\Carbon;
 use Statamic\Contracts\Forms\Form;
@@ -17,7 +17,7 @@ use Statamic\Forms\JsDrivers\Alpine;
  * `@alpinejs/csp` build refuses to evaluate, so this subclass re-renders the
  * two that matter. It is selected with `js="alpine_csp"` on `{{ form:create }}`
  * — the handle `AbstractJsDriver::handle()` derives from this class name — and
- * is registered by `UAMSWeb\AlpineCspForms\ServiceProvider`.
+ * is registered by `UAMSWeb\Aether\Forms\AlpineCsp\ServiceProvider`.
  *
  * ## Why the `show_field` expression is re-rendered
  *

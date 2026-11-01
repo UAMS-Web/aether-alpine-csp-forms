@@ -1,5 +1,5 @@
 {
-    "name": "statamic-alpine-csp-forms",
+    "name": "aether-alpine-csp-forms",
     "private": true,
     "type": "module",
     "engines": {

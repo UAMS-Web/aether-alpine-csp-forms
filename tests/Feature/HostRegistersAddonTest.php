@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace UAMSWeb\AlpineCspForms\Tests\Feature;
+namespace UAMSWeb\Aether\Forms\AlpineCsp\Tests\Feature;
 
 use Statamic\Facades\Addon;
 use Tests\TestCase;
-use UAMSWeb\AlpineCspForms\ServiceProvider;
+use UAMSWeb\Aether\Forms\AlpineCsp\ServiceProvider;
 
 /**
  * Host-bound smoke test: the add-on is discovered and booted by a real Statamic
@@ -18,7 +18,7 @@ use UAMSWeb\AlpineCspForms\ServiceProvider;
  * from the root of the host described in `docs/DEVELOPMENT.md`, with the add-on
  * installed through a path repository.
  *
- * @command  php artisan test vendor/uams-web/statamic-alpine-csp-forms/tests/Feature/HostRegistersAddonTest.php
+ * @command  php artisan test vendor/uams-web/aether-alpine-csp-forms/tests/Feature/HostRegistersAddonTest.php
  */
 final class HostRegistersAddonTest extends TestCase
 {
@@ -32,7 +32,7 @@ final class HostRegistersAddonTest extends TestCase
         $packages = Addon::all()->map->package()->all();
 
         // Expect this add-on among them
-        $this->assertContains('uams-web/statamic-alpine-csp-forms', $packages);
+        $this->assertContains('uams-web/aether-alpine-csp-forms', $packages);
     }
 
     /** The add-on's service provider was registered and booted by the host. */

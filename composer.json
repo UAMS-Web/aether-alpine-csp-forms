@@ -1,5 +1,5 @@
 {
-    "name": "uams-web/statamic-alpine-csp-forms",
+    "name": "uams-web/aether-alpine-csp-forms",
     "description": "CSP-safe Alpine form JavaScript driver for Statamic public forms, with a $showField magic that forwards to Statamic's field-conditions evaluator.",
     "keywords": [
         "statamic",
@@ -7,7 +7,7 @@
     ],
     "type": "statamic-addon",
     "license": "MIT",
-    "homepage": "https://github.com/UAMS-Web/statamic-alpine-csp-forms",
+    "homepage": "https://github.com/UAMS-Web/aether-alpine-csp-forms",
     "authors": [
         {
             "name": "UAMS Web Services"
@@ -18,17 +18,17 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/UAMS-Web/statamic-alpine-csp-forms/issues",
-        "source": "https://github.com/UAMS-Web/statamic-alpine-csp-forms"
+        "issues": "https://github.com/UAMS-Web/aether-alpine-csp-forms/issues",
+        "source": "https://github.com/UAMS-Web/aether-alpine-csp-forms"
     },
     "autoload": {
         "psr-4": {
-            "UAMSWeb\\AlpineCspForms\\": "src/"
+            "UAMSWeb\\Aether\\Forms\\AlpineCsp\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "UAMSWeb\\AlpineCspForms\\Tests\\": "tests/"
+            "UAMSWeb\\Aether\\Forms\\AlpineCsp\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -38,7 +38,7 @@
         },
         "laravel": {
             "providers": [
-                "UAMSWeb\\AlpineCspForms\\ServiceProvider"
+                "UAMSWeb\\Aether\\Forms\\AlpineCsp\\ServiceProvider"
             ]
         },
         "composer-exit-on-patch-failure": true

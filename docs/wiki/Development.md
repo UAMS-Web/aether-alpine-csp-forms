@@ -19,12 +19,12 @@ composer ci
 Behavior that depends on a real install needs a Statamic host: a stock `statamic/statamic` project with a path repository pointing at the add-on checkout.
 
 ```bash
-composer create-project statamic/statamic statamic-alpine-csp-forms-host
-cd statamic-alpine-csp-forms-host
+composer create-project statamic/statamic aether-alpine-csp-forms-host
+cd aether-alpine-csp-forms-host
 composer config repositories.addon path "<path-to-addon-checkout>"
 composer config minimum-stability dev
 composer config prefer-stable true
-composer require uams-web/statamic-alpine-csp-forms:@dev
+composer require uams-web/aether-alpine-csp-forms:@dev
 ```
 
 A path repository installs by symlink where the filesystem allows it, so an edit in the checkout is live in the host. Confirm the add-on loaded with `php artisan package:discover`, and by requesting `/cp/addons` as a super user.
@@ -32,7 +32,7 @@ A path repository installs by symlink where the filesystem allows it, so an edit
 Host-bound tests live in `tests/Feature/` and are not part of `composer ci`. Run them from the host root:
 
 ```bash
-php artisan test vendor/uams-web/statamic-alpine-csp-forms/tests/Feature/
+php artisan test vendor/uams-web/aether-alpine-csp-forms/tests/Feature/
 ```
 
-The full procedure, with the measurements behind it, is in [`docs/DEVELOPMENT.md`](https://github.com/UAMS-Web/statamic-alpine-csp-forms/blob/main/docs/DEVELOPMENT.md).
+The full procedure, with the measurements behind it, is in [`docs/DEVELOPMENT.md`](https://github.com/UAMS-Web/aether-alpine-csp-forms/blob/main/docs/DEVELOPMENT.md).

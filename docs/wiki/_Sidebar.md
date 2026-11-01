@@ -12,7 +12,7 @@
 **Reference**
 
 - [Driver reference](Driver-reference.md)
-- [README](https://github.com/UAMS-Web/statamic-alpine-csp-forms#readme)
+- [README](https://github.com/UAMS-Web/aether-alpine-csp-forms#readme)
 
 **Troubleshooting**
 
@@ -22,5 +22,5 @@
 
 - [Development](Development.md)
 - [Project](Project.md)
-- [Report a problem](https://github.com/UAMS-Web/statamic-alpine-csp-forms/issues)
-- [Releases](https://github.com/UAMS-Web/statamic-alpine-csp-forms/releases)
+- [Report a problem](https://github.com/UAMS-Web/aether-alpine-csp-forms/issues)
+- [Releases](https://github.com/UAMS-Web/aether-alpine-csp-forms/releases)
