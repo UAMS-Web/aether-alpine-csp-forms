@@ -1,19 +1,25 @@
 name: CI
 
-# The jobs mirror the scripts `composer ci` runs locally, but run in parallel: this repository
-# is public, so runner minutes are not a budget, and every failure on a pull request shows at
-# once instead of one job at a time. `composer ci` keeps its cost order, so a local run still
-# stops at the first failure. When a job's command changes here, change the matching `composer`
-# script (and the other way round). The shared setup lives in
-# `.github/actions/setup/action.yml`.
+# This workflow calls the shared job chain in UAMS-Web/uams-ci-workflows and adds the jobs that
+# chain does not provide, plus the one job a ruleset requires, `CI`. The chain (Composer validate,
+# synced files, no-emoji, aggregate-needs, Pint, Rector, PHPStan, mutate-ignore, mutate, Pest) lives
+# in that repository, and its checks report as `checks / <job name> (<operating system>)`. The
+# `.claude/skills/code-quality/templates/ci.yml` template in UAMS-Web/uams-claude-skills is the
+# form this file adopts (UAMS-Web/uams-claude-skills#492). The jobs below the call are this
+# repository's own: they are not in the chain, so they stay here as plain jobs. The shared setup
+# for them lives in `.github/actions/setup/action.yml`.
+#
+# THE PIN. `uses:` names a release tag of the reusable workflow, never a branch, so a change to
+# the chain reaches this repository only when the tag here moves. Dependabot does not move it.
 #
 # REQUIRED CHECKS. The organization ruleset for this repository requires three contexts: `CI`,
-# `Attribution footer` and `Closing keywords`. `CI` is the last job in this file; it `needs:`
-# every other job, runs `if: always()`, and fails unless every needed job reports `success`
-# (a `skipped` or `cancelled` job fails it). The ruleset therefore never lists a job by name:
-# renaming a job changes nothing it requires, and a new job is required once it is added to
-# the `needs:` list of `CI`. Add it there in the same change. Do not rename `CI`.
-# Job names must stay unique across all workflows in this repository.
+# `Attribution footer` and `Closing keywords`. `CI` is the last job in this file; it `needs:` the
+# call and every plain job, runs `if: always()`, and fails unless each reports `success` (a
+# `skipped` or `cancelled` job fails it). The call's own `Chain result` job needs every job in the
+# chain, so the call is `success` only when each of them succeeded. The ruleset therefore never
+# lists a job by name: renaming a job changes nothing it requires, and a new plain job is required
+# once it is added to the `needs:` list of `CI`. Add it there in the same change. Do not rename
+# `CI`. Job names must stay unique across all workflows in this repository.
 
 on:
   pull_request:
@@ -31,24 +37,18 @@ permissions:
   contents: read
 
 jobs:
-  composer-validate:
-    name: Composer validate (composer.lock freshness)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
+  # The shared chain. Its checks report as `checks / <job name> (<operating system>)`. This
+  # repository is checked on Linux alone. `mutate-paths` is where a pull request's changed PHP is
+  # selected for mutation testing; a push mutates everything `composer mutate` covers.
+  checks:
+    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.2.0
+    with:
+      linux-only: true
+      mutate-paths: src
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          coverage: none
-          tools: composer:v2
-
-      # Fails when composer.json and composer.lock have drifted apart.
-      - run: composer validate --no-check-publish --no-check-all
-
-  no-emoji:
-    name: Repository guards (emoji, decision log)
+  # Not in the chain: the decision log has an order a person can break by hand.
+  decision-log:
+    name: Decision log order
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -57,9 +57,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-
-      # Fails, naming the file and code points, when an emoji reaches a tracked record.
-      - run: node scripts/check-no-emoji.mjs
 
       # Fails, naming the two entries, when docs/DECISIONS.md is out of order.
       - run: node scripts/check-decision-log-order.mjs
@@ -115,15 +112,6 @@ jobs:
             exit 1
           fi
 
-  mutate-ignore:
-    name: Mutation annotations (none inert)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      - run: composer test:mutate-ignore
-
   parallel-safe:
     name: Parallel-safe tests (no shared state)
     runs-on: ubuntu-latest
@@ -136,49 +124,6 @@ jobs:
           coverage: none
       # Dependency-free, so it needs PHP and nothing else.
       - run: composer test:parallel-safe
-
-  pint:
-    name: Pint
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      - run: composer test:pint
-
-  rector:
-    name: Rector (gating profile)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      - run: composer test:refactor
-
-  phpstan:
-    name: Larastan (PHPStan)
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      - run: composer stan
-
-  pest:
-    name: Pest (Unit and Integration)
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
-      # --log-junit feeds the band checks below; it changes nothing about what runs.
-      - name: Run the suite
-        run: composer test -- --display-all-issues --log-junit junit-parallel.xml
-
-      # Fails when more tests skipped than tests/skip-baseline.json records (a silent skip
-      # must not read as a pass), or when one class's cost nears the band's.
-      - name: Check the band reports
-        run: composer test:bands
 
   # The add-on promises `statamic/cms` at its `composer.json` constraint and PHP ^8.4, and every
   # job above runs one combination. These legs run the dependency-sensitive checks (Larastan and
@@ -221,22 +166,11 @@ jobs:
       - run: composer stan
       - run: composer test
 
-  # The one check a ruleset requires from this workflow. Keep `needs:` listing every other job
-  # in the file.
+  # The aggregate a ruleset requires; see REQUIRED CHECKS in the header. Keep `needs:` listing the
+  # call and every plain job in the file.
   ci:
     name: CI
-    needs:
-      - composer-validate
-      - no-emoji
-      - scripts
-      - built-assets
-      - mutate-ignore
-      - parallel-safe
-      - pint
-      - rector
-      - phpstan
-      - pest
-      - compatibility
+    needs: [checks, decision-log, scripts, built-assets, parallel-safe, compatibility]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -247,6 +181,8 @@ jobs:
           RESULTS: ${{ join(needs.*.result, ' ') }}
         run: |
           echo "Needed job results: $RESULTS"
+          # An empty list (an emptied `needs:`, a dropped `env:`) would run no iterations and pass having read nothing.
+          if [ -z "$RESULTS" ]; then echo "::error::No needed job results to read"; exit 1; fi
           for result in $RESULTS; do
             if [ "$result" != "success" ]; then
               echo "::error::A needed job reported $result"
