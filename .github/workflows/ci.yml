@@ -25,6 +25,11 @@ on:
   pull_request:
   push:
     branches: [main]
+  # The full mutation pass, weekly (Mondays at 07:17 UTC). At the pinned chain release every event
+  # other than a pull request mutates everything `composer mutate` covers, which catches drift from a
+  # dependency or tooling change that no pull request touches.
+  schedule:
+    - cron: '17 7 * * 1'
   # Lets the workflow be run on demand against a branch.
   workflow_dispatch:
 
