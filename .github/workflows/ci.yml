@@ -25,9 +25,10 @@ on:
   pull_request:
   push:
     branches: [main]
-  # The full mutation pass, weekly (Mondays at 07:17 UTC). At the pinned chain release every event
-  # other than a pull request mutates everything `composer mutate` covers, which catches drift from a
-  # dependency or tooling change that no pull request touches.
+  # The full mutation pass, weekly (Mondays at 07:17 UTC). At the pinned chain release a pull request
+  # and a push mutate only the changed files, and a scheduled or manually dispatched run mutates
+  # everything `composer mutate` covers, which catches drift from a dependency or tooling change that
+  # no pull request touches.
   schedule:
     - cron: '17 7 * * 1'
   # Lets the workflow be run on demand against a branch.
@@ -43,8 +44,9 @@ permissions:
 
 jobs:
   # The shared chain. Its checks report as `checks / <job name> (<operating system>)`. This
-  # repository is checked on Linux alone. `mutate-paths` is where a pull request's changed PHP is
-  # selected for mutation testing; a push mutates everything `composer mutate` covers.
+  # repository is checked on Linux alone. `mutate-paths` is where the changed PHP of a pull request or
+  # a push is selected for mutation testing; the scheduled run mutates everything `composer mutate`
+  # covers.
   checks:
     uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.9.0
     with:
