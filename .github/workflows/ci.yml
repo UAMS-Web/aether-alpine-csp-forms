@@ -46,7 +46,7 @@ jobs:
   # repository is checked on Linux alone. `mutate-paths` is where a pull request's changed PHP is
   # selected for mutation testing; a push mutates everything `composer mutate` covers.
   checks:
-    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.2.0
+    uses: UAMS-Web/uams-ci-workflows/.github/workflows/ci.yml@v0.9.0
     with:
       linux-only: true
       mutate-paths: src
