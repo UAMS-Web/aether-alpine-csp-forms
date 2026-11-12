@@ -22,7 +22,7 @@ abstract class TestCase extends AddonTestCase
     protected string $addonServiceProvider = ServiceProvider::class;
 
     /**
-     * Give each parallel worker its own license-check cache, after Statamic's
+     * Give each parallel worker its own storage directory and license-check cache, after Statamic's
      * test case sets the shared one.
      *
      * Every authenticated Control Panel page asks Statamic's license check, which
@@ -44,11 +44,41 @@ abstract class TestCase extends AddonTestCase
         // Let Statamic's test case configure the environment first
         parent::getEnvironmentSetUp($app);
 
+        // Give this worker its own storage directory, if parallel
+        $storage = self::workerStoragePath($app->storagePath(), $_SERVER['TEST_TOKEN'] ?? null);
+        if ($storage !== null) {
+            if (! is_dir("{$storage}/framework/cache")) {
+                mkdir("{$storage}/framework/cache", 0777, true);
+            }
+
+            $app->useStoragePath($storage);
+        }
+
         // Point the license-check cache at this worker's directory, if any
         $path = self::outpostCachePath($_SERVER['TEST_TOKEN'] ?? null);
         if ($path !== null) {
             $app['config']->set('cache.stores.outpost.path', $path);
         }
+    }
+
+    /**
+     * The storage directory for a parallel worker token, or null outside a
+     * parallel run.
+     *
+     * Laravel writes each real-time facade stub (`Facades\Statamic\Version` and the
+     * like) to `storage/framework/cache` through a temporary file and a rename.
+     * Testbench shares one skeleton storage directory across workers, so on Windows
+     * a worker renaming onto a stub another has open fails with "Access is denied",
+     * failing the test that first loaded the facade (#61). A storage directory per
+     * worker keeps each worker's stubs apart.
+     *
+     * @param  string  $base  The shared storage directory of the Testbench skeleton.
+     * @param  mixed  $token  The parallel worker token, or null outside a parallel run.
+     * @return ?string The worker's storage directory, or null without a usable token.
+     */
+    public static function workerStoragePath(string $base, mixed $token): ?string
+    {
+        return is_string($token) || is_int($token) ? "{$base}/worker-{$token}" : null;
     }
 
     /**
