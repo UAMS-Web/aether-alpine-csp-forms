@@ -16,7 +16,7 @@ PHP 8.4 or later and Statamic 6.35.1 or later. The host loads Alpine itself, usi
 composer require uams-web/aether-alpine-csp-forms
 ```
 
-The add-on's service provider is discovered by Statamic and registers the driver under the handle `alpine_csp`. Statamic publishes the front-end script to `public/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js` after the install; `php artisan vendor:publish --tag=aether-alpine-csp-forms --force` republishes it.
+The add-on's service provider is discovered by Statamic and registers the driver under the handle `alpine_csp`, and `alpine_precognition_csp` for forms that validate through Laravel Precognition. Statamic publishes the front-end script to `public/vendor/aether-alpine-csp-forms/frontend/alpine-csp.js` after the install; `php artisan vendor:publish --tag=aether-alpine-csp-forms --force` republishes it.
 
 ## Usage
 
@@ -26,6 +26,8 @@ Select the driver on the form tag. The scoped form is unchanged:
 {{ form:create js="alpine_csp" }}
 {{ form:create js="alpine_csp:intake" }}
 ```
+
+A form that validates through Laravel Precognition selects `alpine_precognition_csp` instead, with the same scope and component options. The host also loads `laravel-precognition-alpine`, as it does without a CSP.
 
 Load Statamic's `helpers.js`, then the front-end script, before the host's own Alpine bundle starts. As classic deferred scripts they run in document order:
 

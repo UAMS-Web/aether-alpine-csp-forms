@@ -6,6 +6,7 @@ namespace UAMSWeb\Aether\Forms\AlpineCsp;
 
 use Statamic\Providers\AddonServiceProvider;
 use UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\AlpineCsp;
+use UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\AlpinePrecognitionCsp;
 
 /**
  * Service provider for the add-on.
@@ -68,5 +69,9 @@ class ServiceProvider extends AddonServiceProvider
         // Register the CSP-safe Alpine driver as `alpine_csp`, leaving Statamic's stock
         // `alpine` driver in place for anything that still selects it
         AlpineCsp::register();
+
+        // Register the CSP-safe counterpart of Statamic's `alpine_precognition` driver as
+        // `alpine_precognition_csp`
+        AlpinePrecognitionCsp::register();
     }
 }

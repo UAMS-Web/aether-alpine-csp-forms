@@ -24,7 +24,8 @@ You have a form that already uses a JavaScript driver, or one you are about to r
    ```
 
    The form's `x-data` becomes `intakeForm({...})`. An empty component name is ignored.
-4. Make sure [the script is loaded](Installation.md#load-the-script) on any page that renders the form.
+4. For a form that validates through Laravel Precognition, use `alpine_precognition_csp` in place of `alpine_csp` in any step above, for example `{{ form:create js="alpine_precognition_csp:intake" }}`. The scope defaults to `form`, as in Statamic's `alpine_precognition` driver. The host loads `laravel-precognition-alpine` as it does without a CSP.
+5. Make sure [the script is loaded](Installation.md#load-the-script) on any page that renders the form.
 
 ## Reference
 

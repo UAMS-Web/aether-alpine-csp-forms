@@ -15,6 +15,10 @@ The `alpine_csp` driver extends Statamic's stock Alpine driver and changes only 
 | Date field holding the `now` sentinel | Passes the string `now` to the date input, which cannot show it | Today's date in Statamic's display timezone (the application timezone when none is set), unless the field was submitted, even empty. A range-mode date field is untouched |
 | Data that cannot be JSON encoded | Not handled | An empty object, `{}` |
 
+## The `alpine_precognition_csp` driver
+
+The `alpine_precognition_csp` driver extends Statamic's `alpine_precognition` driver and renders the `show_field` expression and the `x-data` payload as `alpine_csp` does. The `$form('post', url, {...})` call, the appended `.setErrors({...})` after a failed submission, and each field's `@change="<scope>.validate('<handle>')"` are left as Statamic renders them, because the CSP interpreter evaluates them. The `$form` magic comes from `laravel-precognition-alpine`, which loads and runs under a CSP without `'unsafe-eval'`. The rows above for non-ASCII text, entities, the plain `x-model`, replicator subfields and the `now` date apply to it too. The scope defaults to `form`.
+
 ## Known limit: control characters
 
 Encoding with these flags cannot reach the C0 control characters. A value holding a backspace, form feed or vertical tab is emitted with a JSON escape (`\b`, `\f` or `\u00XX`) that the CSP tokenizer reads as the literal letters `b`, `f` or `u00XX`. Newline, tab and carriage return are handled correctly, and they are the only control characters a form field realistically carries. Closing the gap needs a change to the `@alpinejs/csp` tokenizer.

@@ -14,7 +14,7 @@ The page shows the form's heading and Submit button and no inputs, and the brows
 
 **Cause:** the form is still using Statamic's stock `alpine` driver, whose conditions read the `Statamic` window global.
 
-**Fix:** set `js="alpine_csp"` on the `form:create` tag. See [Selecting the driver on a form](Selecting-the-driver-on-a-form.md).
+**Fix:** set `js="alpine_csp"` on the `form:create` tag, or `js="alpine_precognition_csp"` when the form validates through Laravel Precognition. See [Selecting the driver on a form](Selecting-the-driver-on-a-form.md).
 
 ## Conditional fields never appear
 
