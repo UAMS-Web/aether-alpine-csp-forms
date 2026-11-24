@@ -26,6 +26,6 @@ Publishing is optional, and nothing the add-on does reads a key from the file. A
 
 ## What the add-on does not register
 
-The service provider registers one thing: the `alpine_csp` form JS driver, which leaves Statamic's stock `alpine` driver in place for any form that still selects it. The add-on adds no routes, Antlers tags, commands, permissions, Control Panel screens or fieldtypes. It declares a Vite build for the Control Panel, `resources/js/cp.js` and `resources/css/cp.css`, whose entry point registers no components yet.
+The service provider registers two form JS drivers, `alpine_csp` and `alpine_precognition_csp`, and leaves Statamic's stock `alpine` and `alpine_precognition` drivers in place for any form that still selects them. The add-on adds no routes, Antlers tags, commands, permissions, Control Panel screens or fieldtypes. It declares a Vite build for the Control Panel, `resources/js/cp.js` and `resources/css/cp.css`, whose entry point registers no components yet.
 
 For what the driver changes in a form's markup, see the [Driver reference](Driver-reference.md).
