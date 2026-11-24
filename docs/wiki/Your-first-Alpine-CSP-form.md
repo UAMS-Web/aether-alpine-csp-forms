@@ -1,4 +1,4 @@
-Written against v0.1.0.
+Written against v0.3.3.
 
 By the end, a public form on your site shows a field only when another field has a given value, and it does so under a Content Security Policy that does not allow `'unsafe-eval'`.
 

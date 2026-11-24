@@ -1,4 +1,4 @@
-Written against v0.1.0.
+Written against v0.3.3.
 
 Alpine CSP Forms is developed in the open at [UAMS-Web/aether-alpine-csp-forms](https://github.com/UAMS-Web/aether-alpine-csp-forms). It is released under the MIT license; see [LICENSE](https://github.com/UAMS-Web/aether-alpine-csp-forms/blob/main/LICENSE).
 
