@@ -1,4 +1,4 @@
-Written against v0.1.0.
+Written against v0.3.3.
 
 ## The gate
 
@@ -8,7 +8,7 @@ npm ci
 composer ci
 ```
 
-`composer ci` runs the repository guards, the Vitest suite for the `$showField` magic, Pint, Rector, Larastan and the Pest `Unit` and `Integration` suites in parallel. `npm ci` needs `vendor/statamic/cms`, because `@statamic/cms` is a `file:` link into it, so run `composer install` first. `composer mutate` runs Pest mutation testing over `src/` and needs a coverage driver (PCOV).
+`composer ci` runs, in order and stopping at the first failure: the repository guards and the Vitest suite for the `$showField` magic, the mutation-ignore, mutation-instrument and parallel-safety checks, Pint in check mode, Rector as a dry run, Larastan, and the Pest `Unit` and `Integration` suites in parallel. `composer test:serial` runs those suites in one process, which is the first thing to try when a failure looks order-dependent. `composer pint` and `composer refactor` apply formatting and the Rector profile. `npm ci` needs `vendor/statamic/cms`, because `@statamic/cms` is a `file:` link into it, so run `composer install` first. `composer mutate` runs Pest mutation testing over `src/` and needs a coverage driver (PCOV).
 
 ## Building the front-end script
 

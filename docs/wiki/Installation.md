@@ -1,8 +1,8 @@
-Written against v0.1.0.
+Written against v0.3.3.
 
 ## Requirements
 
-PHP 8.4 or later and Statamic 6.35.1 or later. The host loads Alpine itself, using the `@alpinejs/csp` build, and loads Statamic's front-end `helpers.js`, which defines the field-conditions evaluator the magic forwards to.
+PHP 8.4 or later and Statamic 6.35.1 or later. Statamic 6.35.1 is the first release whose field-conditions evaluator works without `'unsafe-eval'`, so an earlier release cannot be used under a strict Content Security Policy. The host loads Alpine itself, using the `@alpinejs/csp` build, and loads Statamic's front-end `helpers.js`, which defines the field-conditions evaluator the magic forwards to.
 
 ## Install the package
 
@@ -15,6 +15,8 @@ The add-on's service provider is discovered by Statamic and registers the driver
 ```bash
 php artisan vendor:publish --tag=aether-alpine-csp-forms --force
 ```
+
+The add-on also publishes an empty configuration file under the tag `aether-alpine-csp-forms-config`; see [Configuration](Configuration.md). Nothing needs it.
 
 ## Load the script
 
@@ -41,3 +43,7 @@ A host that bundles the script instead can import `registerShowFieldMagic` from 
 The site returns to Statamic's stock driver. If Statamic ships a CSP-safe driver of its own, this is the path to it.
 
 The same steps, with the requirements, are in the [README](https://github.com/UAMS-Web/aether-alpine-csp-forms#installation).
+
+## Upgrading from the renamed package
+
+The package was renamed from `uams-web/statamic-alpine-csp-forms` to `uams-web/aether-alpine-csp-forms`. The driver handle, the magic and the form tags are unchanged, but the package name, the published script path and the PHP namespace changed. The steps are in the [README](https://github.com/UAMS-Web/aether-alpine-csp-forms#upgrading-from-statamic-alpine-csp-forms) (Installation).

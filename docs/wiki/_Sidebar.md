@@ -8,10 +8,12 @@
 **Guides**
 
 - [Selecting the driver on a form](Selecting-the-driver-on-a-form.md)
+- [Registering a custom condition](Registering-a-custom-condition.md)
 
 **Reference**
 
 - [Driver reference](Driver-reference.md)
+- [Configuration](Configuration.md)
 - [README](https://github.com/UAMS-Web/aether-alpine-csp-forms#readme)
 
 **Troubleshooting**

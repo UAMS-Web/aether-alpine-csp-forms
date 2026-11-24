@@ -1,4 +1,4 @@
-Written against v0.1.0.
+Written against v0.3.3.
 
 You have a form that already uses a JavaScript driver, or one you are about to render, and you want it to use `alpine_csp`. The driver keeps the stock driver's options, so the tag changes and the rest of the template stays.
 

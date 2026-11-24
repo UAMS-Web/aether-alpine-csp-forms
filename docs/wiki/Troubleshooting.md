@@ -1,10 +1,12 @@
-Written against v0.1.0.
+Written against v0.3.3.
 
 - [A form renders with no inputs](#a-form-renders-with-no-inputs)
 - [Conditional fields never appear](#conditional-fields-never-appear)
 - [Every conditional field appears](#every-conditional-field-appears)
 - [The script answers 404](#the-script-answers-404)
 - [A non-ASCII value changes after a failed submit](#a-non-ascii-value-changes-after-a-failed-submit)
+- [A field with a custom condition stays hidden](#a-field-with-a-custom-condition-stays-hidden)
+- [A field shows although its condition is false](#a-field-shows-although-its-condition-is-false)
 
 ## A form renders with no inputs
 
@@ -45,3 +47,19 @@ After validation fails, a name such as `René` comes back as `Renu00e9`.
 **Cause:** an `x-data` attribute carrying a `\uXXXX` escape, which some `@alpinejs/csp` versions do not decode. The `alpine_csp` driver leaves non-ASCII text literal for this reason, so the symptom points at a form still on the stock driver.
 
 **Fix:** select `alpine_csp` on the form tag.
+
+## A field with a custom condition stays hidden
+
+A field whose condition is `custom <name>` never appears, and the browser console reports that the custom condition was not properly defined.
+
+**Cause:** the front-end evaluator has no registry of its own, and `window.StatamicCustomConditions` has no entry under that name.
+
+**Fix:** register the condition on the page. See [Registering a custom condition](Registering-a-custom-condition.md).
+
+## A field shows although its condition is false
+
+The console reports `Field condition evaluation failed; showing the field.` followed by the error, or `Statamic's field-conditions evaluator is missing`.
+
+**Cause:** the magic fails open. When the evaluator throws, or `helpers.js` is not loaded, it shows the field, because a form whose fields all evaluate false renders no inputs at all.
+
+**Fix:** read the error that follows the first message. For the missing evaluator, see [Every conditional field appears](#every-conditional-field-appears). Otherwise the condition or the data it reads is malformed.
