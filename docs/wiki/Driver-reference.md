@@ -12,7 +12,7 @@ The `alpine_csp` driver extends Statamic's stock Alpine driver and changes only 
 | An entity such as `&quot;` in a submitted value | Passed through, and the browser decodes it to a quote that can end the JSON string | Double-encoded, so it stays text |
 | Field binding on Statamic 6.31 and later | `x-model.fill` | A plain `x-model`, so a checkbox group or multi-select that a condition hides and shows again keeps the visitor's choice |
 | Replicator subfield | `x-model` on the bracketed handle `parent[0][child]`, which the CSP interpreter cannot resolve | `x-model` on the bare handle `child`, inside the set's own scope; the `name` attribute keeps the bracketed shape. A subfield of a nested replicator, `outer[0][inner][1][deep]`, binds the innermost handle, `deep` |
-| Date field holding the `now` sentinel | Passes the string `now` to the date input, which cannot show it | Today's date in Statamic's display timezone (the application timezone when none is set), unless the field was submitted, even empty. A range-mode date field is untouched |
+| Date field holding the `now` sentinel | Passes the string `now` to the date input, which cannot show it | Today's date in Statamic's display timezone (the application timezone when none is set), unless the form failed validation with the field submitted, even empty. Old input without that form's error bag, such as another form's failure, does not count. A range-mode date field is untouched |
 | Data that cannot be JSON encoded | Not handled | An empty object, `{}` |
 
 ## The `alpine_precognition_csp` driver

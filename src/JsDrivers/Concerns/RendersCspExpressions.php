@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UAMSWeb\Aether\Forms\AlpineCsp\JsDrivers\Concerns;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\ViewErrorBag;
 use Statamic\Contracts\Forms\Form;
 use Statamic\Fields\Blueprint;
 use Statamic\Fields\Field;
@@ -96,8 +97,8 @@ trait RendersCspExpressions
      * the Gravity Forms `{date_mdy}` default.
      *
      * Only this public driver substitutes the date, so the Control Panel keeps its handling of
-     * `now`. A field present in `old()` after a failed validation is left as the parent rendered
-     * it, even when the visitor left it empty: Statamic fills an empty value with the default,
+     * `now`. A field present in `old()` after this form failed validation is left as the parent
+     * rendered it, even when the visitor left it empty: Statamic fills an empty value with the default,
      * and refilling today would undo the visitor's choice. A range-mode field preprocesses to a
      * start/end array, never the bare sentinel, so it is untouched. Today is read in Statamic's
      * display timezone, the calendar the site's visitors use, rather than the application's UTC.
@@ -109,14 +110,19 @@ trait RendersCspExpressions
     {
         $data = parent::getInitialFormData();
 
-        // `old()` is null without a failed submission, which the cast turns into no fields
-        /** @var array<array-key, mixed> $old */
-        $old = (array) old();
-
         // The parent declares both untyped; a driver is always built with a form, and a form
         // always resolves a blueprint (an empty one when none is stored)
         /** @var Form $form */
         $form = $this->form;
+
+        // The parent applies `old()` only for the form that failed validation, which holds the
+        // error bag `form.<handle>`; any other request carrying old input, such as another form's
+        // failure, left it unused. The bag lives in the session, so `old()` reads it and is an array.
+        /** @var ViewErrorBag|null $errors */
+        $errors = session('errors');
+        /** @var array<array-key, mixed> $old */
+        $old = $errors?->hasBag('form.'.$form->handle()) ? old() : [];
+
         /** @var Blueprint $blueprint */
         $blueprint = $form->blueprint();
 
@@ -132,7 +138,7 @@ trait RendersCspExpressions
                 continue;
             }
 
-            // Never one the visitor submitted, even empty
+            // Never one this form's visitor submitted, even empty
             if (array_key_exists($handle, $old)) {
                 continue;
             }

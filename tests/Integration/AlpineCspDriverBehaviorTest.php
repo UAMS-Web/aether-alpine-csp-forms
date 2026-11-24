@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Carbon\Carbon;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 use Statamic\Facades\Blueprint;
 use Statamic\Facades\Form;
 use Statamic\Fields\BlueprintRepository;
@@ -62,10 +64,11 @@ function useSentinelDateFieldtype(): void
  * @param  array<string, array<string, mixed>>  $fields  Blueprint fields keyed by handle.
  * @param  list<string>  $options  The driver's scope and component options.
  * @param  array<string, mixed>  $params  The tag parameters the driver reads, such as `x-data`.
+ * @param  string|null  $handle  The form handle, unique to the call when omitted.
  */
-function alpineCspDriver(array $fields, array $options = [], array $params = []): AlpineCsp
+function alpineCspDriver(array $fields, array $options = [], array $params = [], ?string $handle = null): AlpineCsp
 {
-    $handle = 'behavior_'.uniqid();
+    $handle ??= 'behavior_'.uniqid();
 
     app(BlueprintRepository::class)->setFallback(
         'forms.'.$handle,
@@ -190,23 +193,68 @@ it('leaves a date field alone when it does not hold the sentinel', function (): 
     Carbon::setTestNow();
 });
 
+/**
+ * Flash old input and, optionally, the error bag of a form's failed submission.
+ *
+ * @param  array<string, mixed>  $input  The submitted values.
+ * @param  string|null  $failedForm  The handle of the form whose validation failed, if any.
+ */
+function flashAlpineCspSubmission(array $input, ?string $failedForm): void
+{
+    request()->setLaravelSession(app('session.store'));
+    session()->flashInput($input);
+
+    if ($failedForm !== null) {
+        session()->put('errors', (new ViewErrorBag)->put('form.'.$failedForm, new MessageBag(['submitted' => ['Required']])));
+    }
+}
+
 it('does not refill a date the visitor submitted, even empty', function (): void {
     useSentinelDateFieldtype();
     Carbon::setTestNow(Carbon::parse('2026-03-05 12:00:00', 'UTC'));
     config(['statamic.system.display_timezone' => 'UTC']);
 
-    // A failed validation flashes the submitted input, and the first date was left empty
-    request()->setLaravelSession(app('session.store'));
-    session()->flashInput(['submitted' => '']);
+    // A failed validation flashes the submitted input and the form's error bag, and the first date was left empty
+    flashAlpineCspSubmission(['submitted' => ''], 'behavior_failed');
 
     // The submitted field comes first, so a `break` there would also skip the date after it
     $data = alpineCspFormData(alpineCspDriver([
         'submitted' => ['type' => 'date', 'default' => 'now'],
         'untouched' => ['type' => 'date', 'default' => 'now'],
-    ]));
+    ], handle: 'behavior_failed'));
 
     expect($data['submitted'])->toBe('now')
         ->and($data['untouched'])->toBe('2026-03-05');
+
+    Carbon::setTestNow();
+});
+
+it('fills today into a date when old input holds its handle but the form has no error bag', function (): void {
+    useSentinelDateFieldtype();
+    Carbon::setTestNow(Carbon::parse('2026-03-05 12:00:00', 'UTC'));
+    config(['statamic.system.display_timezone' => 'UTC']);
+
+    // Any redirect carrying input flashes old values, with no failed submission of this form
+    flashAlpineCspSubmission(['when' => ''], null);
+
+    $data = alpineCspFormData(alpineCspDriver(['when' => ['type' => 'date', 'default' => 'now']]));
+
+    expect($data['when'])->toBe('2026-03-05');
+
+    Carbon::setTestNow();
+});
+
+it('fills today into a date when only another form failed validation', function (): void {
+    useSentinelDateFieldtype();
+    Carbon::setTestNow(Carbon::parse('2026-03-05 12:00:00', 'UTC'));
+    config(['statamic.system.display_timezone' => 'UTC']);
+
+    // The other form's failure flashes input that carries this form's handle too
+    flashAlpineCspSubmission(['when' => ''], 'another_form');
+
+    $data = alpineCspFormData(alpineCspDriver(['when' => ['type' => 'date', 'default' => 'now']], handle: 'behavior_this'));
+
+    expect($data['when'])->toBe('2026-03-05');
 
     Carbon::setTestNow();
 });
